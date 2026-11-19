@@ -1,7 +1,8 @@
 name: excel
-description: A flutter and dart library for reading, creating, editing and updating excel sheets with compatible both on client and server side.
+description: Read, create and edit Excel XLSX workbooks in Dart and Flutter. Supports typed cells, formulas, styles and multiple worksheets.
 version: 5.0.0
-homepage: https://github.com/justkawal/excel
+repository: https://github.com/Telosnex/excel_fork
+issue_tracker: https://github.com/Telosnex/excel_fork/issues
 topics:
   - excel
   - office
