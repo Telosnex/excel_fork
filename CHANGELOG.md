@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [5.0.0]
+- First Telosnex release. Allow XML 7 and Equatable 3 while retaining compatibility with previous dependency ranges.
 - Update packages to latest versions
 - Migrate from `dart:html` to `package:web`
 - Set minimum dart sdk version to 3.6.0

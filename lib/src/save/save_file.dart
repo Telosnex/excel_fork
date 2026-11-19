@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 class Save {
   final Excel _excel;
@@ -9,12 +9,12 @@ class Save {
   Save._(this._excel, this.parser);
 
   void _addNewColumn(XmlElement columns, int min, int max, double width) {
-    columns.children.add(XmlElement(XmlName('col'), [
-      XmlAttribute(XmlName('min'), (min + 1).toString()),
-      XmlAttribute(XmlName('max'), (max + 1).toString()),
-      XmlAttribute(XmlName('width'), width.toStringAsFixed(2)),
-      XmlAttribute(XmlName('bestFit'), "1"),
-      XmlAttribute(XmlName('customWidth'), "1"),
+    columns.children.add(XmlElement(_xmlName('col'), [
+      XmlAttribute(_xmlName('min'), (min + 1).toString()),
+      XmlAttribute(_xmlName('max'), (max + 1).toString()),
+      XmlAttribute(_xmlName('width'), width.toStringAsFixed(2)),
+      XmlAttribute(_xmlName('bestFit'), "1"),
+      XmlAttribute(_xmlName('customWidth'), "1"),
     ], []));
   }
 
@@ -57,9 +57,9 @@ class Save {
     String rC = getCellId(columnIndex, rowIndex);
 
     var attributes = <XmlAttribute>[
-      XmlAttribute(XmlName('r'), rC),
-      if (value is TextCellValue) XmlAttribute(XmlName('t'), 's'),
-      if (value is BoolCellValue) XmlAttribute(XmlName('t'), 'b'),
+      XmlAttribute(_xmlName('r'), rC),
+      if (value is TextCellValue) XmlAttribute(_xmlName('t'), 's'),
+      if (value is BoolCellValue) XmlAttribute(_xmlName('t'), 'b'),
     ];
 
     final cellStyle =
@@ -77,14 +77,14 @@ class Save {
       }
       attributes.insert(
         1,
-        XmlAttribute(XmlName('s'), '$upperLevelPos'),
+        XmlAttribute(_xmlName('s'), '$upperLevelPos'),
       );
     } else if (_excel._cellStyleReferenced.containsKey(sheet) &&
         _excel._cellStyleReferenced[sheet]!.containsKey(rC)) {
       attributes.insert(
         1,
         XmlAttribute(
-            XmlName('s'), '${_excel._cellStyleReferenced[sheet]![rC]}'),
+            _xmlName('s'), '${_excel._cellStyleReferenced[sheet]![rC]}'),
       );
     }
 
@@ -95,8 +95,8 @@ class Save {
         children = [];
       case FormulaCellValue():
         children = [
-          XmlElement(XmlName('f'), [], [XmlText(value.formula)]),
-          XmlElement(XmlName('v'), [], [XmlText('')]),
+          XmlElement(_xmlName('f'), [], [XmlText(value.formula)]),
+          XmlElement(_xmlName('v'), [], [XmlText('')]),
         ];
       case IntCellValue():
         final String v = switch (numberFormat) {
@@ -105,7 +105,7 @@ class Save {
               '$numberFormat does not work for ${value.runtimeType}'),
         };
         children = [
-          XmlElement(XmlName('v'), [], [XmlText(v)]),
+          XmlElement(_xmlName('v'), [], [XmlText(v)]),
         ];
       case DoubleCellValue():
         final String v = switch (numberFormat) {
@@ -114,7 +114,7 @@ class Save {
               '$numberFormat does not work for ${value.runtimeType}'),
         };
         children = [
-          XmlElement(XmlName('v'), [], [XmlText(v)]),
+          XmlElement(_xmlName('v'), [], [XmlText(v)]),
         ];
       case DateTimeCellValue():
         final String v = switch (numberFormat) {
@@ -123,7 +123,7 @@ class Save {
               '$numberFormat does not work for ${value.runtimeType}'),
         };
         children = [
-          XmlElement(XmlName('v'), [], [XmlText(v)]),
+          XmlElement(_xmlName('v'), [], [XmlText(v)]),
         ];
       case DateCellValue():
         final String v = switch (numberFormat) {
@@ -132,7 +132,7 @@ class Save {
               '$numberFormat does not work for ${value.runtimeType}'),
         };
         children = [
-          XmlElement(XmlName('v'), [], [XmlText(v)]),
+          XmlElement(_xmlName('v'), [], [XmlText(v)]),
         ];
       case TimeCellValue():
         final String v = switch (numberFormat) {
@@ -141,30 +141,30 @@ class Save {
               '$numberFormat does not work for ${value.runtimeType}'),
         };
         children = [
-          XmlElement(XmlName('v'), [], [XmlText(v)]),
+          XmlElement(_xmlName('v'), [], [XmlText(v)]),
         ];
       case TextCellValue():
         children = [
-          XmlElement(XmlName('v'), [], [
+          XmlElement(_xmlName('v'), [], [
             XmlText(_excel._sharedStrings.indexOf(sharedString!).toString())
           ]),
         ];
       case BoolCellValue():
         children = [
-          XmlElement(XmlName('v'), [], [XmlText(value.value ? '1' : '0')]),
+          XmlElement(_xmlName('v'), [], [XmlText(value.value ? '1' : '0')]),
         ];
     }
 
-    return XmlElement(XmlName('c'), attributes, children);
+    return XmlElement(_xmlName('c'), attributes, children);
   }
 
   /// Create a new row in the sheet.
   XmlElement _createNewRow(XmlElement table, int rowIndex, double? height) {
-    var row = XmlElement(XmlName('row'), [
-      XmlAttribute(XmlName('r'), (rowIndex + 1).toString()),
+    var row = XmlElement(_xmlName('row'), [
+      XmlAttribute(_xmlName('r'), (rowIndex + 1).toString()),
       if (height != null)
-        XmlAttribute(XmlName('ht'), height.toStringAsFixed(2)),
-      if (height != null) XmlAttribute(XmlName('customHeight'), '1'),
+        XmlAttribute(_xmlName('ht'), height.toStringAsFixed(2)),
+      if (height != null) XmlAttribute(_xmlName('customHeight'), '1'),
     ], []);
     table.children.add(row);
     return row;
@@ -229,52 +229,53 @@ class Save {
       fontAttribute.value =
           '${_excel._fontStyleList.length + innerFontStyle.length}';
     } else {
-      fonts.attributes.add(XmlAttribute(XmlName('count'),
+      fonts.attributes.add(XmlAttribute(_xmlName('count'),
           '${_excel._fontStyleList.length + innerFontStyle.length}'));
     }
 
     innerFontStyle.forEach((fontStyleElement) {
-      fonts.children.add(XmlElement(XmlName('font'), [], [
+      fonts.children.add(XmlElement(_xmlName('font'), [], [
         /// putting color
         if (fontStyleElement._fontColorHex != null &&
             fontStyleElement._fontColorHex!.colorHex != "FF000000")
-          XmlElement(XmlName('color'), [
+          XmlElement(_xmlName('color'), [
             XmlAttribute(
-                XmlName('rgb'), fontStyleElement._fontColorHex!.colorHex)
+                _xmlName('rgb'), fontStyleElement._fontColorHex!.colorHex)
           ], []),
 
         /// putting bold
-        if (fontStyleElement.isBold) XmlElement(XmlName('b'), [], []),
+        if (fontStyleElement.isBold) XmlElement(_xmlName('b'), [], []),
 
         /// putting italic
-        if (fontStyleElement.isItalic) XmlElement(XmlName('i'), [], []),
+        if (fontStyleElement.isItalic) XmlElement(_xmlName('i'), [], []),
 
         /// putting single underline
         if (fontStyleElement.underline != Underline.None &&
             fontStyleElement.underline == Underline.Single)
-          XmlElement(XmlName('u'), [], []),
+          XmlElement(_xmlName('u'), [], []),
 
         /// putting double underline
         if (fontStyleElement.underline != Underline.None &&
             fontStyleElement.underline != Underline.Single &&
             fontStyleElement.underline == Underline.Double)
           XmlElement(
-              XmlName('u'), [XmlAttribute(XmlName('val'), 'double')], []),
+              _xmlName('u'), [XmlAttribute(_xmlName('val'), 'double')], []),
 
         /// putting fontFamily
         if (fontStyleElement.fontFamily != null &&
             fontStyleElement.fontFamily!.toLowerCase().toString() != 'null' &&
             fontStyleElement.fontFamily != '' &&
             fontStyleElement.fontFamily!.isNotEmpty)
-          XmlElement(XmlName('name'), [
-            XmlAttribute(XmlName('val'), fontStyleElement.fontFamily.toString())
+          XmlElement(_xmlName('name'), [
+            XmlAttribute(
+                _xmlName('val'), fontStyleElement.fontFamily.toString())
           ], []),
 
         /// putting fontScheme
         if (fontStyleElement.fontScheme != FontScheme.Unset)
-          XmlElement(XmlName('scheme'), [
+          XmlElement(_xmlName('scheme'), [
             XmlAttribute(
-                XmlName('val'),
+                _xmlName('val'),
                 switch (fontStyleElement.fontScheme) {
                   FontScheme.Major => "major",
                   _ => "minor"
@@ -284,8 +285,8 @@ class Save {
         /// putting fontSize
         if (fontStyleElement.fontSize != null &&
             fontStyleElement.fontSize.toString().isNotEmpty)
-          XmlElement(XmlName('sz'), [
-            XmlAttribute(XmlName('val'), fontStyleElement.fontSize.toString())
+          XmlElement(_xmlName('sz'), [
+            XmlAttribute(_xmlName('val'), fontStyleElement.fontSize.toString())
           ], []),
       ]));
     });
@@ -299,29 +300,29 @@ class Save {
       fillAttribute.value =
           '${_excel._patternFill.length + innerPatternFill.length}';
     } else {
-      fills.attributes.add(XmlAttribute(XmlName('count'),
+      fills.attributes.add(XmlAttribute(_xmlName('count'),
           '${_excel._patternFill.length + innerPatternFill.length}'));
     }
 
     innerPatternFill.forEach((color) {
       if (color.length >= 2) {
         if (color.substring(0, 2).toUpperCase() == 'FF') {
-          fills.children.add(XmlElement(XmlName('fill'), [], [
-            XmlElement(XmlName('patternFill'), [
-              XmlAttribute(XmlName('patternType'), 'solid')
+          fills.children.add(XmlElement(_xmlName('fill'), [], [
+            XmlElement(_xmlName('patternFill'), [
+              XmlAttribute(_xmlName('patternType'), 'solid')
             ], [
-              XmlElement(XmlName('fgColor'),
-                  [XmlAttribute(XmlName('rgb'), color)], []),
-              XmlElement(
-                  XmlName('bgColor'), [XmlAttribute(XmlName('rgb'), color)], [])
+              XmlElement(_xmlName('fgColor'),
+                  [XmlAttribute(_xmlName('rgb'), color)], []),
+              XmlElement(_xmlName('bgColor'),
+                  [XmlAttribute(_xmlName('rgb'), color)], [])
             ])
           ]));
         } else if (color == "none" ||
             color == "gray125" ||
             color == "lightGray") {
-          fills.children.add(XmlElement(XmlName('fill'), [], [
-            XmlElement(XmlName('patternFill'),
-                [XmlAttribute(XmlName('patternType'), color)], [])
+          fills.children.add(XmlElement(_xmlName('fill'), [], [
+            XmlElement(_xmlName('patternFill'),
+                [XmlAttribute(_xmlName('patternType'), color)], [])
           ]));
         }
       } else {
@@ -339,18 +340,18 @@ class Save {
       borderAttribute.value =
           '${_excel._borderSetList.length + innerBorderSet.length}';
     } else {
-      borders.attributes.add(XmlAttribute(XmlName('count'),
+      borders.attributes.add(XmlAttribute(_xmlName('count'),
           '${_excel._borderSetList.length + innerBorderSet.length}'));
     }
 
     innerBorderSet.forEach((border) {
-      var borderElement = XmlElement(XmlName('border'));
+      var borderElement = XmlElement(_xmlName('border'));
       if (border.diagonalBorderDown) {
         borderElement.attributes
-            .add(XmlAttribute(XmlName('diagonalDown'), '1'));
+            .add(XmlAttribute(_xmlName('diagonalDown'), '1'));
       }
       if (border.diagonalBorderUp) {
-        borderElement.attributes.add(XmlAttribute(XmlName('diagonalUp'), '1'));
+        borderElement.attributes.add(XmlAttribute(_xmlName('diagonalUp'), '1'));
       }
       final Map<String, Border> borderMap = {
         'left': border.leftBorder,
@@ -362,15 +363,15 @@ class Save {
       for (var key in borderMap.keys) {
         final borderValue = borderMap[key]!;
 
-        final element = XmlElement(XmlName(key));
+        final element = XmlElement(_xmlName(key));
         final style = borderValue.borderStyle;
         if (style != null) {
-          element.attributes.add(XmlAttribute(XmlName('style'), style.style));
+          element.attributes.add(XmlAttribute(_xmlName('style'), style.style));
         }
         final color = borderValue.borderColorHex;
         if (color != null) {
           element.children.add(XmlElement(
-              XmlName('color'), [XmlAttribute(XmlName('rgb'), color)]));
+              _xmlName('color'), [XmlAttribute(_xmlName('rgb'), color)]));
         }
         borderElement.children.add(element);
       }
@@ -387,7 +388,7 @@ class Save {
       cellAttribute.value =
           '${_excel._cellStyleList.length + _innerCellStyle.length}';
     } else {
-      celx.attributes.add(XmlAttribute(XmlName('count'),
+      celx.attributes.add(XmlAttribute(_xmlName('count'),
           '${_excel._cellStyleList.length + _innerCellStyle.length}'));
     }
 
@@ -418,14 +419,14 @@ class Save {
       };
 
       var attributes = <XmlAttribute>[
-        XmlAttribute(XmlName('borderId'),
+        XmlAttribute(_xmlName('borderId'),
             '${borderIndex == -1 ? 0 : borderIndex + _excel._borderSetList.length}'),
-        XmlAttribute(XmlName('fillId'),
+        XmlAttribute(_xmlName('fillId'),
             '${backgroundIndex == -1 ? 0 : backgroundIndex + _excel._patternFill.length}'),
-        XmlAttribute(XmlName('fontId'),
+        XmlAttribute(_xmlName('fontId'),
             '${fontIndex == -1 ? 0 : fontIndex + _excel._fontStyleList.length}'),
-        XmlAttribute(XmlName('numFmtId'), numFmtId.toString()),
-        XmlAttribute(XmlName('xfId'), '0'),
+        XmlAttribute(_xmlName('numFmtId'), numFmtId.toString()),
+        XmlAttribute(_xmlName('xfId'), '0'),
       ];
 
       if ((_excel._patternFill.contains(backgroundColor) ||
@@ -433,12 +434,12 @@ class Save {
           backgroundColor != "none" &&
           backgroundColor != "gray125" &&
           backgroundColor.toLowerCase() != "lightgray") {
-        attributes.add(XmlAttribute(XmlName('applyFill'), '1'));
+        attributes.add(XmlAttribute(_xmlName('applyFill'), '1'));
       }
 
       if (_fontStyleIndex(_excel._fontStyleList, _fs) != -1 &&
           _fontStyleIndex(innerFontStyle, _fs) != -1) {
-        attributes.add(XmlAttribute(XmlName('applyFont'), '1'));
+        attributes.add(XmlAttribute(_xmlName('applyFont'), '1'));
       }
 
       var children = <XmlElement>[];
@@ -447,12 +448,12 @@ class Save {
           textWrapping != null ||
           verticalAlign != VerticalAlign.Bottom ||
           rotation != 0) {
-        attributes.add(XmlAttribute(XmlName('applyAlignment'), '1'));
+        attributes.add(XmlAttribute(_xmlName('applyAlignment'), '1'));
         var childAttributes = <XmlAttribute>[];
 
         if (textWrapping != null) {
           childAttributes.add(XmlAttribute(
-              XmlName(textWrapping == TextWrapping.Clip
+              _xmlName(textWrapping == TextWrapping.Clip
                   ? 'shrinkToFit'
                   : 'wrapText'),
               '1'));
@@ -460,23 +461,23 @@ class Save {
 
         if (verticalAlign != VerticalAlign.Bottom) {
           String ver = verticalAlign == VerticalAlign.Top ? 'top' : 'center';
-          childAttributes.add(XmlAttribute(XmlName('vertical'), '$ver'));
+          childAttributes.add(XmlAttribute(_xmlName('vertical'), '$ver'));
         }
 
         if (horizontalAlign != HorizontalAlign.Left) {
           String hor =
               horizontalAlign == HorizontalAlign.Right ? 'right' : 'center';
-          childAttributes.add(XmlAttribute(XmlName('horizontal'), '$hor'));
+          childAttributes.add(XmlAttribute(_xmlName('horizontal'), '$hor'));
         }
         if (rotation != 0) {
           childAttributes
-              .add(XmlAttribute(XmlName('textRotation'), '$rotation'));
+              .add(XmlAttribute(_xmlName('textRotation'), '$rotation'));
         }
 
-        children.add(XmlElement(XmlName('alignment'), childAttributes, []));
+        children.add(XmlElement(_xmlName('alignment'), childAttributes, []));
       }
 
-      celx.children.add(XmlElement(XmlName('xf'), attributes, children));
+      celx.children.add(XmlElement(_xmlName('xf'), attributes, children));
     });
 
     final customNumberFormats = _excel._numFormats._map.entries
@@ -497,7 +498,7 @@ class Save {
           .firstOrNull;
       int count;
       if (numFmtsElement == null) {
-        numFmtsElement = XmlElement(XmlName('numFmts'));
+        numFmtsElement = XmlElement(_xmlName('numFmts'));
 
         ///FIX: if no default numFormats were added in styles.xml - customNumFormats were added in wrong place,
         styleSheet
@@ -519,10 +520,10 @@ class Save {
                 node.getAttribute('numFmtId') == numFmtIdString);
         if (numFmtElement == null) {
           numFmtElement = XmlElement(
-              XmlName('numFmt'),
+              _xmlName('numFmt'),
               [
-                XmlAttribute(XmlName('numFmtId'), numFmtIdString),
-                XmlAttribute(XmlName('formatCode'), formatCode),
+                XmlAttribute(_xmlName('numFmtId'), numFmtIdString),
+                XmlAttribute(_xmlName('formatCode'), formatCode),
               ],
               [],
               true);
@@ -584,7 +585,7 @@ class Save {
       final sheetData = xmlFile.findAllElements('sheetData').first;
       final index = worksheet.children.indexOf(sheetData);
 
-      worksheet.children.insert(index, XmlElement(XmlName('cols'), [], []));
+      worksheet.children.insert(index, XmlElement(_xmlName('cols'), [], []));
     }
 
     var columns = columnElements.first;
@@ -656,7 +657,7 @@ class Save {
     }
     List<XmlElement> sheetList =
         _excel._xmlFiles['xl/workbook.xml']!.findAllElements('sheet').toList();
-    XmlElement elementFound = XmlElement(XmlName(''));
+    XmlElement elementFound = XmlElement(_xmlName(''));
 
     int position = -1;
     for (int i = 0; i < sheetList.length; i++) {
@@ -742,8 +743,8 @@ class Save {
                 .children
                 .insert(
                     index + 1,
-                    XmlElement(XmlName('mergeCells'),
-                        [XmlAttribute(XmlName('count'), '0')]));
+                    XmlElement(_xmlName('mergeCells'),
+                        [XmlAttribute(_xmlName('count'), '0')]));
 
             mergeElement = _excel._xmlFiles[_excel._xmlSheetId[s]]!
                 .findAllElements('mergeCells')
@@ -761,7 +762,7 @@ class Save {
         ].forEach((value) {
           if (mergeElement.getAttributeNode(value[0]) == null) {
             mergeElement.attributes
-                .add(XmlAttribute(XmlName(value[0]), value[1]));
+                .add(XmlAttribute(_xmlName(value[0]), value[1]));
           } else {
             mergeElement.getAttributeNode(value[0])!.value = value[1];
           }
@@ -770,8 +771,8 @@ class Save {
         mergeElement.children.clear();
 
         _spannedItems.forEach((value) {
-          mergeElement.children.add(XmlElement(XmlName('mergeCell'),
-              [XmlAttribute(XmlName('ref'), '$value')], []));
+          mergeElement.children.add(XmlElement(_xmlName('mergeCell'),
+              [XmlAttribute(_xmlName('ref'), '$value')], []));
         });
       }
     });
@@ -800,8 +801,8 @@ class Save {
   }
 
   XmlElement _createRow(int rowIndex) {
-    return XmlElement(XmlName('row'),
-        [XmlAttribute(XmlName('r'), (rowIndex + 1).toString())], []);
+    return XmlElement(_xmlName('row'),
+        [XmlAttribute(_xmlName('r'), (rowIndex + 1).toString())], []);
   }
 
   XmlElement __insertRow(XmlElement table, XmlElement lastRow, int rowIndex) {
@@ -843,11 +844,11 @@ class Save {
               .first
               .children
               .add(XmlElement(
-                XmlName('sheetView'),
+                _xmlName('sheetView'),
                 [
                   if (sheetObject.isRTL)
-                    XmlAttribute(XmlName('rightToLeft'), '1'),
-                  XmlAttribute(XmlName('workbookViewId'), '0'),
+                    XmlAttribute(_xmlName('rightToLeft'), '1'),
+                  XmlAttribute(_xmlName('workbookViewId'), '0'),
                 ],
               ));
         } else {
@@ -855,13 +856,13 @@ class Save {
               ?.findAllElements('worksheet')
               .first
               .children
-              .add(XmlElement(XmlName('sheetViews'), [], [
+              .add(XmlElement(_xmlName('sheetViews'), [], [
                 XmlElement(
-                  XmlName('sheetView'),
+                  _xmlName('sheetView'),
                   [
                     if (sheetObject.isRTL)
-                      XmlAttribute(XmlName('rightToLeft'), '1'),
-                    XmlAttribute(XmlName('workbookViewId'), '0'),
+                      XmlAttribute(_xmlName('rightToLeft'), '1'),
+                    XmlAttribute(_xmlName('workbookViewId'), '0'),
                   ],
                 )
               ]));
@@ -895,7 +896,7 @@ class Save {
       ['uniqueCount', '$uniqueCount']
     ].forEach((value) {
       if (shareString.getAttributeNode(value[0]) == null) {
-        shareString.attributes.add(XmlAttribute(XmlName(value[0]), value[1]));
+        shareString.attributes.add(XmlAttribute(_xmlName(value[0]), value[1]));
       } else {
         shareString.getAttributeNode(value[0])!.value = value[1];
       }
@@ -943,17 +944,18 @@ class Save {
           worksheetElement.children.remove(sheetFormatPrElement);
         }
       } else if (defaultRowHeight != null || defaultColumnWidth != null) {
-        sheetFormatPrElement = XmlElement(XmlName('sheetFormatPr'), [], []);
+        sheetFormatPrElement = XmlElement(_xmlName('sheetFormatPr'), [], []);
         worksheetElement.children.insert(0, sheetFormatPrElement);
       }
 
       if (defaultRowHeight != null) {
         sheetFormatPrElement!.attributes.add(XmlAttribute(
-            XmlName('defaultRowHeight'), defaultRowHeight.toStringAsFixed(2)));
+            _xmlName('defaultRowHeight'), defaultRowHeight.toStringAsFixed(2)));
       }
       if (defaultColumnWidth != null) {
         sheetFormatPrElement!.attributes.add(XmlAttribute(
-            XmlName('defaultColWidth'), defaultColumnWidth.toStringAsFixed(2)));
+            _xmlName('defaultColWidth'),
+            defaultColumnWidth.toStringAsFixed(2)));
       }
 
       _setColumns(sheetObject, xmlFile);

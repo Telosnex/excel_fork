@@ -1,40 +1,8 @@
-# Excel
+# Telosnex Excel
 
-<a href='https://flutter.io'>  
-  <img src='https://img.shields.io/badge/Platform-Flutter-yellow.svg'  
-    alt='Platform' />  
-</a>
-<a href='https://pub.dartlang.org/packages/excel'>  
-  <img src='https://img.shields.io/pub/v/excel.svg'  
-    alt='Pub Package' />
-</a>
-<a href='https://opensource.org/licenses/MIT'>  
-  <img src='https://img.shields.io/badge/License-MIT-red.svg'  
-    alt='License: MIT' />
-</a>
-<a href='https://github.com/justkawal/excel/issues'>  
-  <img src='https://img.shields.io/github/issues/justkawal/excel'  
-    alt='Issues' />  
-</a>
-<a href='https://github.com/justkawal/excel/network'>  
-  <img src='https://img.shields.io/github/forks/justkawal/excel'  
-    alt='Forks' />  
-</a>
-<a href='https://github.com/justkawal/excel/stargazers'>  
-  <img src='https://img.shields.io/github/stars/justkawal/excel'  
-    alt='Stars' />  
-</a>
+Read, create and edit XLSX workbooks in Dart and Flutter. This is the Telosnex fork of [excel](https://github.com/justkawal/excel), with support for XML 7 and Equatable 3.
 
-### [Excel](https://www.pub.dev/packages/excel) is a flutter and dart library for reading, creating and updating excel-sheets for XLSX files.
-
-## Road-map:
- - ➕ Formulas and Calculations
- - 💾 Support Multiple Data type efficiently
- - 📈 Charts
- - 🌄 Add Pictures
- - 📰 Create Tables and style
- - 🔐 Encrypt and Decrypt excel on the go.
- - Many more **features**
+Install the published package with `dart pub add telosnex_excel` and import `package:telosnex_excel/telosnex_excel.dart`.
 
 ## Breaking changes from 4.x.x to 5.x.x
 

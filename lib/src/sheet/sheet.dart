@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 class Sheet {
   final Excel _excel;
@@ -296,7 +296,7 @@ class Sheet {
   ///
   /// updates count of rows and columns
   ///
-  _countRowsAndColumns() {
+  void _countRowsAndColumns() {
     int maximumColumnIndex = -1, maximumRowIndex = -1;
     List<int> sortedKeys = _sheetData.keys.toList()..sort();
     sortedKeys.forEach((rowKey) {
@@ -1104,9 +1104,7 @@ class Sheet {
 
     cell._value = value;
     cell._cellStyle = CellStyle(numberFormat: NumFormat.defaultFor(value));
-    if (cell._cellStyle != NumFormat.standard_0) {
-      _excel._styleChanges = true;
-    }
+    _excel._styleChanges = true;
 
     if ((_maxColumns - 1) < columnIndex) {
       _maxColumns = columnIndex + 1;

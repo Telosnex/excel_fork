@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:archive/archive.dart';
-import 'package:excel/excel.dart';
+import 'package:telosnex_excel/excel.dart';
 import 'package:test/test.dart';
 import 'package:xml/xml.dart';
 
@@ -539,7 +539,6 @@ void main() {
         .first
         .getAttributeNode("uniqueCount");
 
-
     expect(oldUniqueCount!.value, equals(newUniqueCount!.value));
     expect(oldCount!.value, "12");
     expect(newCount!.value, "15");
@@ -594,7 +593,6 @@ void main() {
           newExcel.tables['Sheet1']!.headerFooter!.oddHeader!, equals('Foo'));
       expect(
           newExcel.tables['Sheet1']!.headerFooter!.oddFooter!, equals('Bar'));
-
     });
 
     test("Save empty Workbook", () {
@@ -833,7 +831,6 @@ void main() {
       expect(cellStyleB1?.rightBorder, equals(borderMedium));
       expect(cellStyleB1?.topBorder, equals(borderEmpty));
       expect(cellStyleB1?.bottomBorder, equals(borderMediumRed));
-
     });
   });
 
@@ -904,7 +901,6 @@ void main() {
       final newExcel = Excel.decodeBytes(newFileBytes);
       expect(newExcel.tables['Sheet1']!.rows[3][2]!.value.toString(),
           equals('ロケール選択'));
-
     });
   });
 

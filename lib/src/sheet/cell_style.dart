@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 /// Styling class for cells
 // ignore: must_be_immutable
@@ -235,8 +235,8 @@ class CellStyle extends Equatable {
 
   ///set `Underline`
   ///
-  set underline(Underline _) {
-    _underline = _;
+  set underline(Underline value) {
+    _underline = value;
   }
 
   ///Get `Bold`

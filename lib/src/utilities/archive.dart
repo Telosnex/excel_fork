@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 Archive _cloneArchive(
   Archive archive,
