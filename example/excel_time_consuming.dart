@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart';
-import 'package:excel/excel.dart';
+import 'package:telosnex_excel/excel.dart';
 
 void main(List<String> args) {
   Stopwatch stopwatch = new Stopwatch()..start();

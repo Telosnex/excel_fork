@@ -1,7 +1,7 @@
-name: excel
+name: telosnex_excel
 description: Read, create and edit Excel XLSX workbooks in Dart and Flutter. Supports typed cells, formulas, styles and multiple worksheets.
 version: 5.0.0
-repository: https://github.com/Telosnex/excel_fork
+repository: https://github.com/Telosnex/excel_fork/tree/published
 issue_tracker: https://github.com/Telosnex/excel_fork/issues
 topics:
   - excel
