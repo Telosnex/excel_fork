@@ -292,11 +292,12 @@ void main() {
   });
 
   group('Sheet Operations', () {
-    var file = './test/test_resources/example.xlsx';
-    var bytes = File(file).readAsBytesSync();
-    Excel excel = Excel.decodeBytes(bytes);
-    test('create Sheet', () {
-      Sheet sheetObject = excel['SheetTmp'];
+    final bytes = File('./test/test_resources/example.xlsx').readAsBytesSync();
+    late Excel excel;
+    setUp(() => excel = Excel.decodeBytes(bytes));
+
+    void addSheet(String name) {
+      final sheetObject = excel[name];
       sheetObject.insertRowIterables([
         TextCellValue('Country'),
         TextCellValue('Capital'),
@@ -307,6 +308,10 @@ void main() {
         TextCellValue('Moscow'),
         TextCellValue('Putin')
       ], 1);
+    }
+
+    test('create Sheet', () {
+      addSheet('SheetTmp');
       expect(excel.sheets.entries.length, equals(2));
       expect(excel.tables['Sheet1']!.rows[1][1]!.value.toString(),
           equals('Washington'));
@@ -316,6 +321,7 @@ void main() {
     });
 
     test('copy Sheet', () {
+      addSheet('SheetTmp');
       excel.copy('SheetTmp', 'SheetTmp2');
       expect(excel.sheets.entries.length, equals(3));
       expect(excel.tables['Sheet1']!.rows[1][1]!.value.toString(),
@@ -328,9 +334,11 @@ void main() {
     });
 
     test('rename Sheet', () {
+      addSheet('SheetTmp');
+      addSheet('SheetTmp2');
       excel.rename('SheetTmp2', 'SheetTmp3');
       expect(excel.sheets.entries.length, equals(3));
-      expect(excel.tables['Sheettmp2'], equals(null));
+      expect(excel.tables['SheetTmp2'], equals(null));
       expect(excel.tables['Sheet1']!.rows[1][1]!.value.toString(),
           equals('Washington'));
       expect(excel.tables['SheetTmp']!.maxColumns, equals(3));
@@ -341,6 +349,8 @@ void main() {
     });
 
     test('delete Sheet', () {
+      addSheet('SheetTmp');
+      addSheet('SheetTmp3');
       excel.delete('SheetTmp3');
       excel.delete('SheetTmp');
       expect(excel.sheets.entries.length, equals(1));
