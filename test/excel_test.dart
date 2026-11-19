@@ -6,6 +6,12 @@ import 'package:excel/excel.dart';
 import 'package:test/test.dart';
 import 'package:xml/xml.dart';
 
+File temporaryWorkbook(String name) {
+  final directory = Directory.systemTemp.createTempSync('excel-test-');
+  addTearDown(() => directory.delete(recursive: true));
+  return File.fromUri(directory.uri.resolve(name));
+}
+
 void main() {
   test('Create New XLSX File', () {
     var excel = Excel.createExcel();
@@ -354,16 +360,15 @@ void main() {
       TextCellValue('Putin')
     ], 4);
     var fileBytes = excel.encode();
+    final output = temporaryWorkbook('exampleOut.xlsx');
     if (fileBytes != null) {
-      File(Directory.current.path + '/tmp/exampleOut.xlsx')
+      output
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }
-    var newFile = './tmp/exampleOut.xlsx';
+    var newFile = output.path;
     var newFileBytes = File(newFile).readAsBytesSync();
     var newExcel = Excel.decodeBytes(newFileBytes);
-    // delete tmp folder
-    new Directory('./tmp').delete(recursive: true);
     expect(newExcel.sheets.entries.length, equals(1));
     expect(newExcel.tables['Sheet1']!.rows[1][1]!.value.toString(),
         equals('Washington'));
@@ -394,18 +399,17 @@ void main() {
     //stopwatch.reset();
     List<int>? fileBytes = excel.save();
     //print('saving executed in ${stopwatch.elapsed}');
+    final output = temporaryWorkbook('exampleOut.xlsx');
     if (fileBytes != null) {
-      File(Directory.current.path + '/tmp/exampleOut.xlsx')
+      output
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }
 
-    var newFile = './tmp/exampleOut.xlsx';
+    var newFile = output.path;
     var newFileBytes = File(newFile).readAsBytesSync();
     var newExcel = Excel.decodeBytes(newFileBytes);
 
-    // delete tmp folder
-    new Directory('./tmp').delete(recursive: true);
     expect(newExcel.sheets.entries.length, equals(1));
     expect(newExcel.tables['Sheet1']!.maxColumns, equals(5));
     expect(
@@ -454,16 +458,15 @@ void main() {
     var excel = Excel.decodeBytes(bytes);
 
     var fileBytes = excel.encode();
+    final output = temporaryWorkbook('superscriptExampleOut.xlsx');
     if (fileBytes != null) {
-      File(Directory.current.path + '/tmp/superscriptExampleOut.xlsx')
+      output
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }
-    var newFile = './tmp/superscriptExampleOut.xlsx';
+    var newFile = output.path;
     var newFileBytes = File(newFile).readAsBytesSync();
     var newExcel = Excel.decodeBytes(newFileBytes);
-    // delete tmp folder
-    new Directory('./tmp').delete(recursive: true);
     expect(newExcel.sheets.entries.length, equals(1));
 
     expect(newExcel.tables['Sheet1']!.rows[0][0]!.value.toString(),
@@ -502,12 +505,13 @@ void main() {
       TextCellValue('Benjamin Netanyahu')
     ], 4);
     var fileBytes = excel.encode();
+    final output = temporaryWorkbook('exampleOut.xlsx');
     if (fileBytes != null) {
-      File(Directory.current.path + '/tmp/exampleOut.xlsx')
+      output
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }
-    var newFile = './tmp/exampleOut.xlsx';
+    var newFile = output.path;
     var newFileBytes = File(newFile).readAsBytesSync();
     expect(() => Excel.decodeBytes(newFileBytes), returnsNormally);
 
@@ -525,8 +529,6 @@ void main() {
         .first
         .getAttributeNode("uniqueCount");
 
-    // delete tmp folder
-    new Directory('./tmp').delete(recursive: true);
 
     expect(oldUniqueCount!.value, equals(newUniqueCount!.value));
     expect(oldCount!.value, "12");
@@ -539,16 +541,15 @@ void main() {
     var excel = Excel.decodeBytes(bytes);
 
     var fileBytes = excel.encode();
+    final output = temporaryWorkbook('superscriptExampleOut.xlsx');
     if (fileBytes != null) {
-      File(Directory.current.path + '/tmp/superscriptExampleOut.xlsx')
+      output
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }
-    var newFile = './tmp/superscriptExampleOut.xlsx';
+    var newFile = output.path;
     var newFileBytes = File(newFile).readAsBytesSync();
     var newExcel = Excel.decodeBytes(newFileBytes);
-    // delete tmp folder
-    new Directory('./tmp').delete(recursive: true);
     expect(newExcel.sheets.entries.length, equals(1));
 
     expect(newExcel.tables['Sheet1']!.rows[0][0]!.value.toString(),
@@ -570,12 +571,13 @@ void main() {
       sheetObject.headerFooter!.oddFooter = "Bar";
 
       var fileBytes = excel.encode();
+      final output = temporaryWorkbook('exampleOut.xlsx');
       if (fileBytes != null) {
-        File(Directory.current.path + '/tmp/exampleOut.xlsx')
+        output
           ..createSync(recursive: true)
           ..writeAsBytesSync(fileBytes);
       }
-      var newFile = './tmp/exampleOut.xlsx';
+      var newFile = output.path;
       var newFileBytes = File(newFile).readAsBytesSync();
       var newExcel = Excel.decodeBytes(newFileBytes);
       expect(
@@ -583,8 +585,6 @@ void main() {
       expect(
           newExcel.tables['Sheet1']!.headerFooter!.oddFooter!, equals('Bar'));
 
-      // delete tmp folder only when test is successful (diagnosis)
-      new Directory('./tmp').delete(recursive: true);
     });
 
     test("Save empty Workbook", () {
@@ -798,7 +798,7 @@ void main() {
       final bytes = File(file).readAsBytesSync();
       final excel = Excel.decodeBytes(bytes);
 
-      final outFilePath = Directory.current.path + '/tmp/bordersOut.xlsx';
+      final outFilePath = temporaryWorkbook('bordersOut.xlsx').path;
       final fileBytes = excel.encode();
       if (fileBytes != null) {
         File(outFilePath)
@@ -824,8 +824,6 @@ void main() {
       expect(cellStyleB1?.topBorder, equals(borderEmpty));
       expect(cellStyleB1?.bottomBorder, equals(borderMediumRed));
 
-      // delete tmp folder only when test is successful (diagnosis)
-      new Directory('./tmp').delete(recursive: true);
     });
   });
 
@@ -884,7 +882,7 @@ void main() {
       final excel = Excel.decodeBytes(bytes);
       excel.tables['Sheet1']!.rows[3][2]!.value = TextCellValue('ロケール選択');
 
-      final outFilePath = Directory.current.path + '/tmp/rphSampleOut.xlsx';
+      final outFilePath = temporaryWorkbook('rphSampleOut.xlsx').path;
       final fileBytes = excel.encode();
       if (fileBytes != null) {
         File(outFilePath)
@@ -897,8 +895,6 @@ void main() {
       expect(newExcel.tables['Sheet1']!.rows[3][2]!.value.toString(),
           equals('ロケール選択'));
 
-      // delete tmp folder only when test is successful (diagnosis)
-      new Directory('./tmp').delete(recursive: true);
     });
   });
 
@@ -1047,16 +1043,15 @@ void main() {
       testSpannedItemsSheetValues(sheet);
 
       var fileBytes = excel.encode();
+      final output = temporaryWorkbook('spannedItemExampleOut.xlsx');
       if (fileBytes != null) {
-        File(Directory.current.path + '/tmp/spannedItemExampleOut.xlsx')
+        output
           ..createSync(recursive: true)
           ..writeAsBytesSync(fileBytes);
       }
-      var newFile = './tmp/spannedItemExampleOut.xlsx';
+      var newFile = output.path;
       var newFileBytes = File(newFile).readAsBytesSync();
       var newExcel = Excel.decodeBytes(newFileBytes);
-      // delete tmp folder
-      new Directory('./tmp').delete(recursive: true);
 
       Sheet? newSheet = newExcel.tables["Spanned Items"]!;
 
