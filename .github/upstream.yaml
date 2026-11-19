@@ -1,0 +1,5 @@
+sources:
+  - name: justkawal/excel
+    branch: https://github.com/justkawal/excel
+    ref: main
+    pin: 751dfc597c893a0b34eccfe6921f126e03a5c683
