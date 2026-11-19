@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 class Border extends Equatable {
   final BorderStyle? borderStyle;

@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 String _decimalToHexadecimal(int decimalVal) {
   if (decimalVal == 0) {

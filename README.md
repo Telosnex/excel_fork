@@ -2,7 +2,7 @@
 
 Read, create and edit XLSX workbooks in Dart and Flutter. This is the Telosnex fork of [excel](https://github.com/justkawal/excel), with support for XML 7 and Equatable 3.
 
-Install the published package with `dart pub add telosnex_excel` and import `package:telosnex_excel/excel.dart`.
+Install the published package with `dart pub add telosnex_excel` and import `package:telosnex_excel/telosnex_excel.dart`.
 
 ## Breaking changes from 4.x.x to 5.x.x
 

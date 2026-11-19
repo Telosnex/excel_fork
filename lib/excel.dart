@@ -42,3 +42,8 @@ part 'src/sheet/cell_style.dart';
 part 'src/sheet/font_style.dart';
 part 'src/sheet/header_footer.dart';
 part 'src/sheet/border_style.dart';
+
+// XML 6 and 7 share this constructor; XmlName.parts exists only in XML 7.
+XmlName _xmlName(String local, [String? prefix]) =>
+    // ignore: deprecated_member_use
+    XmlName(local, prefix);
