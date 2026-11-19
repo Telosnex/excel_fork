@@ -509,7 +509,7 @@ class Parser {
     return null; // pretending that the node's children is not having specified child.
   }
 
-  int _getFontIndex(var node, String text) {
+  int _getFontIndex(XmlElement node, String text) {
     String? applyFont = node.getAttribute(text)?.trim();
     if (applyFont != null) {
       try {
@@ -565,7 +565,7 @@ class Parser {
     _normalizeTable(sheetObject);
   }
 
-  _parseRow(XmlElement node, Sheet sheetObject, String name) {
+  void _parseRow(XmlElement node, Sheet sheetObject, String name) {
     var rowIndex = (_getRowNumber(node) ?? -1) - 1;
     if (rowIndex < 0) {
       return;

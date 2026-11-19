@@ -1,4 +1,4 @@
-import 'package:excel/telosnex_excel.dart';
+import 'package:telosnex_excel/telosnex_excel.dart';
 
 void main() {
   final workbook = Excel.createExcel();
